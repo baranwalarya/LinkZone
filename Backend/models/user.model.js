@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    latName:{
+    lastName:{
         type:String,
         required:true
     },
@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
     connection:[
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref:User
+            ref:"User"
         }
     ]
 
