@@ -14,10 +14,13 @@ function Signup() {
   let [userName,setUserName]=useState("")
   let [email,setEmail]=useState("")
   let [password,setPassword]=useState("")
+  let [loading,setLoading]=useState(false)
+  let [err,setErr]=useState("")
 
 
   const handleSignUp=async (e) => {
     e.preventDefault()
+    setLoading(true)
     try {
       let result= await axios.post(serverUrl+"/api/auth/signup",{
         firstName,
@@ -27,13 +30,16 @@ function Signup() {
         password
       },{withCredentials:true})
       console.log(result)
+      setErr("")
+      setLoading(false)
       setFirstName("")
       setLastName("")
       setUserName("")
       setEmail("")
       setPassword("")
     } catch (error) {
-      console.log(error)
+      setErr(error.response.data.message)
+      setLoading(false)
     }
   }
 
@@ -57,7 +63,12 @@ function Signup() {
           <span className='absolute right-[20px] top-[10px] text-[#1d60fd] cursor-pointer font-semibold' onClick={()=>setShow(prev=>!prev)}>{show?"hidden":"show"}</span>
         </div>
 
-        <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white'>SignUp</button>
+        {err && <p className='text-center text-red-500'>
+            {err}
+          </p>
+        }
+
+        <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white ' disabled={loading}>{loading?"Loading...":"SignUp"}</button>
 
         <p className='text-center cursor-pointer' onClick={()=>navigate("/login")}>Already have an account? <span className='text-[#1d60fd] ' >Sign In</span></p>
 
