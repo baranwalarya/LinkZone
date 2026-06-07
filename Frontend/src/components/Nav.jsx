@@ -1,13 +1,32 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import logo2 from "../assets/logo2.png"
 import { IoSearchSharp } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 import { FaUsers } from "react-icons/fa";
 import { IoNotificationsSharp } from "react-icons/io5";
 import dp from "../assets/dp.png"
+import {userDataContext} from '../context/UserContext.jsx'
+import { authDataContext } from '../context/AuthContext.jsx';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Nav() {
     let [activeSearch,setActiveSearch] = useState(false)
+    let {userData,setUserData}=useContext(userDataContext)
+    let [showPopUp,setShowPopUp] = useState(false)
+    let navigate=useNavigate()
+    let {serverUrl} = useContext(authDataContext)
+
+    const handleSignOut = async () => {
+        try {
+            let result = await axios.get(serverUrl+"/api/auth/logout",{withCredentials:true})
+            setUserData(null)
+            console.log(result)
+            navigate("/login")
+        } catch (error) {
+            console.log(error)
+        }
+    }
   return (
     <div className='w-full h-[80px] bg-[white] fixed top-0 shadow-lg flex justify-between md:justify-around items-center px-[10px]'>
         <div className='flex justify-center items-center gap-[10px]'>
@@ -28,15 +47,61 @@ function Nav() {
 
 
         {/* Right div  */}
-        <div className='flex justify-center items-center gap-[50px]relative'>      
+        <div className='flex justify-center items-center gap-[20px] relative'>    
 
-            <div className='w-[300px] h-[400px] bg-white shadow-lg absolute top-[82px]'></div>
+            {showPopUp && <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] rounded-lg flex flex-col items-center p-[20px] gap-[20px]'>
+
+                <div className='w-[70px] h-[70px] rounded-full overflow-hidden'>
+                    <img src={dp} alt="" className='w-full h-full'/>
+                </div>
+
+                <div className='text-[19px] font-semibold text-gray-700'>
+                    {`${userData.firstName} ${userData.lastName}`}
+                </div>
+
+                <button className='w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]'>View Profile</button>
+
+                <div className='w-full h-[1px] bg-gray-700'></div>
+
+                <div className='flex w-full items-center justify-start text-gray-600 gap-[10px]'>
+                    <FaUsers className='h-[23px] w-[23px] text-gray-600'/>
+                    <div>My Network</div>
+                </div>
+
+                <button className='w-[100%] h-[40px] rounded-full border-2 border-[#ff2d2d] text-[#ff2d2d]' onClick={handleSignOut}>Sign Out</button>
+            </div>}  
+
+            {/* Pop Up Div */}
+
+            <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] rounded-lg flex flex-col items-center p-[20px] gap-[20px]'>
+
+                <div className='w-[70px] h-[70px] rounded-full overflow-hidden'>
+                    <img src={dp} alt="" className='w-full h-full'/>
+                </div>
+
+                <div className='text-[19px] font-semibold text-gray-700'>
+                    {`${userData.firstName} ${userData.lastName}`}
+                </div>
+
+                <button className='w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]'>View Profile</button>
+
+                <div className='w-full h-[1px] bg-gray-700'></div>
+
+                <div className='flex w-full items-center justify-start text-gray-600 gap-[10px]'>
+                    <FaUsers className='h-[23px] w-[23px] text-gray-600'/>
+                    <div>My Network</div>
+                </div>
+
+                <button className='w-[100%] h-[40px] rounded-full border-2 border-[#ff2d2d] text-[#ff2d2d]' onClick={handleSignOut}>Sign Out</button>
+            </div>
+
+
 
             <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden'>
                 <IoMdHome className='h-[20px] w-[20px] text-gray-600'/>
                 <div>Home</div>
             </div>
-            <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden'>
+            <div className='md:flex flex-col items-center justify-center text-gray-600 hidden'>
                 <FaUsers className='h-[20px] w-[20px] text-gray-600'/>
                 <div>My Network</div>
             </div>
@@ -45,7 +110,7 @@ function Nav() {
                 <div className='hidden md:block'>Notification</div>
             </div>
             <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
-                <img src={dp} alt="" />
+                <img src={dp} alt="" className='w-full h-full'/>
             </div>
         </div>
     </div>
