@@ -51,7 +51,7 @@ function Nav() {
 
             {/* Pop Up Div */}
 
-            {showPopUp && <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] rounded-lg flex flex-col items-center p-[20px] gap-[20px]'>
+            {showPopUp && <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] right-0 rounded-lg flex flex-col items-center p-[20px] gap-[20px] z-50'>
 
                 <div className='w-[70px] h-[70px] rounded-full overflow-hidden'>
                     <img src={dp} alt="" className='w-full h-full'/>
