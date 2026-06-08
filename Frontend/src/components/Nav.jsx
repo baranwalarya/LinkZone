@@ -49,6 +49,8 @@ function Nav() {
         {/* Right div  */}
         <div className='flex justify-center items-center gap-[20px] relative'>    
 
+            {/* Pop Up Div */}
+
             {showPopUp && <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] rounded-lg flex flex-col items-center p-[20px] gap-[20px]'>
 
                 <div className='w-[70px] h-[70px] rounded-full overflow-hidden'>
@@ -71,10 +73,7 @@ function Nav() {
                 <button className='w-[100%] h-[40px] rounded-full border-2 border-[#ff2d2d] text-[#ff2d2d]' onClick={handleSignOut}>Sign Out</button>
             </div>}  
 
-            {/* Pop Up Div */}
-
-
-
+            
 
             <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden'>
                 <IoMdHome className='h-[20px] w-[20px] text-gray-600'/>
