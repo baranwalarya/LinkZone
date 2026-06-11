@@ -26,7 +26,7 @@ function Home() {
           {/* Cover Image */}
           <div className='w-[100%] h-[100px] bg-gray-400 rounded overflow-hidden flex items-center justify-center relative cursor-pointer ' onClick={()=>setEdit(true)}>
             <img src="" alt="" className='w-full'/>
-            <IoCameraOutline className='absolute right-[10px] top-[30px] w-[25px] h-[25px] text-gray-800 cursor-pointer' />
+            <IoCameraOutline className='absolute right-[10px] top-[30px] w-[25px] h-[25px] text-white cursor-pointer' />
           </div>
 
           {/* Profile Image */}
