@@ -21,7 +21,13 @@ function EditProfile() {
     let [newEducation,setNewEducation]=useState({
             college:"",
             degree:"",
-            fieldOfStudy:"",
+            fieldOfStudy:""
+        })
+    let [experience,setExperience] = useState(userData.skills || [])
+    let [newExperience,setNewExperience]=useState({
+            title:"",
+            company:"",
+            description:""
         })
 
     function addSkill(e){
@@ -46,15 +52,39 @@ function EditProfile() {
         setNewEducation({
             college:"",
             degree:"",
-            fieldOfStudy:"",
+            fieldOfStudy:""
         })
+    }
+
+    function removeEducation(edu){
+        if(education.includes(edu)){
+           setEducation(education.filter((e)=>e!==edu))
+        }
+    }
+
+    function addExperience(e){
+        e.preventDefault()
+        if(newExperience.title && newExperience.company && newExperience.description){
+            setExperience([...experience,newExperience])
+        }
+        setNewExperience({
+            title:"",
+            company:"",
+            description:""
+        })
+    }
+
+    function removeExperience(exp){
+        if(experience.includes(exp)){
+           setExperience(experience.filter((ex)=>ex!==exp))
+        }
     }
 
   return (
     <div className='w-full h-[100vh] fixed top-0 z-[200] flex justify-center items-center'>
         <div className='w-full h-full bg-black opacity-[0.5] absolute '>
         </div>
-        <div className='w-[90%] max-w-[490px] h-[600px] bg-white relative z-[200] shadow-lg rounded-lg p-[10px] overflow-auto'>
+    <div className='w-[90%] max-w-[490px] h-[600px] bg-white relative z-[200] shadow-lg rounded-lg p-[10px] overflow-auto'>
             <div className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-gray-800 font-semibold cursor-pointer ' onClick={()=>setEdit(false)}><RxCross1 className='w-[25px] cursor-pointer h-[25px] text-gray-800 font-bold'/></div>
 
 
@@ -99,12 +129,12 @@ function EditProfile() {
                 <h1 className='text-[19px] font-semibold'>Education</h1>
                 {education && <div className='flex flex-col gap-[10px]'>
                     {education.map((edu,index)=>(
-                        <div key={index} className='w-full h-[40px] border-[1px] border-gray-600 bg-gray-200 rounded-lg p-[10px] flex justify-between items-center'><div>
+                        <div key={index} className='w-full  border-[1px] border-gray-600 bg-gray-200 rounded-lg p-[10px] flex justify-between items-center'><div>
                                 <div>College:{edu.college}</div>
                                 <div>Degree:{edu.degree}</div>
                                 <div>Field Of Study:{edu.fieldOfStudy}</div>
                             </div> 
-                            <RxCross1 className='w-[20px] h-[20px] text-gray-800 font-bold cursor-pointer' /> </div>
+                            <RxCross1 className='w-[20px] h-[20px] text-gray-800 font-bold cursor-pointer' onClick={()=>removeEducation(edu)}/> </div>
                     ))}
                 </div>}
                 <div className='flex flex-col gap-[10px] items-start' >
@@ -113,11 +143,33 @@ function EditProfile() {
                     <input type="text" placeholder='fieldOfStudy' value={newEducation.fieldOfStudy} onChange={(e)=>setNewEducation({...newEducation,fieldOfStudy:e.target.value})} className='w-full h-[50px] outline-none border-gray-600 px-[10px] py-[2px] text-[16px] border-2 rounded-lg'/>
                     <button className='w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]' onClick={addEducation}>Add</button>
                 </div>
+            </div> 
+
+            {/* Experience */}
+            <div className='w-full p-[10px] border-2 border-gray-600 flex flex-col gap-[10px] rounded-lg'>
+                <h1 className='text-[19px] font-semibold'>Experience</h1>
+                {experience && <div className='flex flex-col gap-[10px]'>
+                    {experience.map((exp,index)=>(
+                        <div key={index} className='w-full  border-[1px] border-gray-600 bg-gray-200 rounded-lg p-[10px] flex justify-between items-center'><div>
+                                <div>Title:{exp.title}</div>
+                                <div>Company:{exp.company}</div>
+                                <div>Description:{exp.description}</div>
+                            </div> 
+                            <RxCross1 className='w-[20px] h-[20px] text-gray-800 font-bold cursor-pointer' onClick={()=>removeExperience(exp)}/> </div>
+                    ))}
+                </div>}
+                <div className='flex flex-col gap-[10px] items-start' >
+                    <input type="text" placeholder='title' value={newExperience.title} onChange={(e)=>setNewExperience({...newExperience,title:e.target.value})} className='w-full h-[50px] outline-none border-gray-600 px-[10px] py-[2px] text-[16px] border-2 rounded-lg'/>
+                    <input type="text" placeholder='company' value={newExperience.company} onChange={(e)=>setNewExperience({...newExperience,company:e.target.value})} className='w-full h-[50px] outline-none border-gray-600 px-[10px] py-[2px] text-[16px] border-2 rounded-lg'/>
+                    <input type="text" placeholder='description' value={newExperience.description} onChange={(e)=>setNewExperience({...newExperience,description:e.target.value})} className='w-full h-[50px] outline-none border-gray-600 px-[10px] py-[2px] text-[16px] border-2 rounded-lg'/>
+                    <button className='w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]' onClick={addExperience}>Add</button>
+                </div>
             </div>
-                
-        </div>
+
+            <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white '>Save Profile</button>
 
         </div>
+    </div>
     </div>
   )
 }
