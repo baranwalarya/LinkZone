@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
 import { useContext } from 'react';
 import { userDataContext } from '../context/UserContext.jsx';
@@ -22,13 +22,23 @@ function EditProfile() {
             college:"",
             degree:"",
             fieldOfStudy:""
-        })
+    })
     let [experience,setExperience] = useState(userData.skills || [])
     let [newExperience,setNewExperience]=useState({
             title:"",
             company:"",
             description:""
-        })
+    })
+    
+
+    let [frontendProfileImage,setFrontendProfileImage] = useState(userData.profileImage || dp)
+    let [backendProfileImage,setBackendProfileImage] = useState(null)
+    let [frontendCoverImage,setFrontendCoverImage] = useState(userData.profileImage || dp)
+    let [backendCoverImage,setBackendCoverImage] = useState(null)
+    
+
+    const profileImage=useRef();
+    const coverImage=useRef();
 
     function addSkill(e){
         e.preventDefault()
@@ -82,19 +92,24 @@ function EditProfile() {
 
   return (
     <div className='w-full h-[100vh] fixed top-0 z-[200] flex justify-center items-center'>
+
+
+        <input type="file" accept='image/*' hidden ref={profileImage}/>
+        <input type="file" accept='image/*' hidden ref={coverImage}/>
+
         <div className='w-full h-full bg-black opacity-[0.5] absolute '>
         </div>
     <div className='w-[90%] max-w-[490px] h-[600px] bg-white relative z-[200] shadow-lg rounded-lg p-[10px] overflow-auto'>
             <div className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-gray-800 font-semibold cursor-pointer ' onClick={()=>setEdit(false)}><RxCross1 className='w-[25px] cursor-pointer h-[25px] text-gray-800 font-bold'/></div>
 
 
-        <div className='w-full h-[150px] bg-gray-500 rounded-lg mt-[40px] overflow-hidden '>
-            <img src="" alt="" className='w-full'/>
+        <div className='w-full h-[150px] bg-gray-500 rounded-lg mt-[40px] overflow-hidden' onClick={()=>coverImage.current.click()}>
+            <img src={userData.coverImage || null} alt="" className='w-full'/>
             <IoCameraOutline className='absolute right-[10px] top-[70px] w-[25px] h-[25px] text-white cursor-pointer' />
         </div>
 
-        <div className='w-[80px] h-[80px] rounded-full overflow-hidden absolute top-[150px] ml-[20px]'>
-            <img src={dp} alt="" className='w-full h-full'/>
+        <div className='w-[80px] h-[80px] rounded-full overflow-hidden absolute top-[150px] ml-[20px]' onClick={()=>profileImage.current.click()}>
+            <img src={userData.profileImage || dp} alt="" className='w-full h-full'/>
         </div>
 
         <div className='w-[20px] h-[20px] bg-[#17c1ff] absolute top-[200px] left-[84px] rounded-full flex justify-center items-center'>
