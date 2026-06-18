@@ -33,7 +33,7 @@ function EditProfile() {
 
     let [frontendProfileImage,setFrontendProfileImage] = useState(userData.profileImage || dp)
     let [backendProfileImage,setBackendProfileImage] = useState(null)
-    let [frontendCoverImage,setFrontendCoverImage] = useState(userData.profileImage || dp)
+    let [frontendCoverImage,setFrontendCoverImage] = useState(userData.coverImage || null)
     let [backendCoverImage,setBackendCoverImage] = useState(null)
     
 
@@ -90,12 +90,24 @@ function EditProfile() {
         }
     }
 
+    function handleProfileImage(e){
+        let file=e.target.files[0]
+        setBackendProfileImage(file)
+        setFrontendProfileImage(URL.createObjectURL(file))
+    }
+
+    function handleCoverImage(e){
+        let file=e.target.files[0]
+        setBackendCoverImage(file)
+        setFrontendCoverImage(URL.createObjectURL(file))
+    }
+
   return (
     <div className='w-full h-[100vh] fixed top-0 z-[200] flex justify-center items-center'>
 
 
-        <input type="file" accept='image/*' hidden ref={profileImage}/>
-        <input type="file" accept='image/*' hidden ref={coverImage}/>
+        <input type="file" accept='image/*' hidden ref={profileImage} onChange={handleProfileImage}/>
+        <input type="file" accept='image/*' hidden ref={coverImage} onChange={handleCoverImage}/>
 
         <div className='w-full h-full bg-black opacity-[0.5] absolute '>
         </div>
@@ -104,12 +116,12 @@ function EditProfile() {
 
 
         <div className='w-full h-[150px] bg-gray-500 rounded-lg mt-[40px] overflow-hidden' onClick={()=>coverImage.current.click()}>
-            <img src={userData.coverImage || null} alt="" className='w-full'/>
+            <img src={frontendCoverImage} alt="" className='w-full'/>
             <IoCameraOutline className='absolute right-[10px] top-[70px] w-[25px] h-[25px] text-white cursor-pointer' />
         </div>
 
         <div className='w-[80px] h-[80px] rounded-full overflow-hidden absolute top-[150px] ml-[20px]' onClick={()=>profileImage.current.click()}>
-            <img src={userData.profileImage || dp} alt="" className='w-full h-full'/>
+            <img src={frontendProfileImage} alt="" className='w-full h-full'/>
         </div>
 
         <div className='w-[20px] h-[20px] bg-[#17c1ff] absolute top-[200px] left-[84px] rounded-full flex justify-center items-center'>
