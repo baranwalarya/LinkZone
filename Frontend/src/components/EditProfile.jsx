@@ -1,14 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
+import axios from "axios";
 import { useContext } from 'react';
 import { userDataContext } from '../context/UserContext.jsx';
 import dp from "../assets/dp.png"
 import { FiPlus } from "react-icons/fi";
 import { IoCameraOutline } from "react-icons/io5";
+import { authDataContext } from '../context/AuthContext.jsx';
 
 function EditProfile() {
 
     let {userData,setUserData,edit,setEdit}=useContext(userDataContext)
+    let {serverUrl}=useContext(authDataContext)
     let [firstName,setFirstName] = useState(userData.firstName || "")
     let [lastName,setLastName] = useState(userData.lastName || "")
     let [userName,setUserName] = useState(userData.userName || "")
@@ -23,7 +26,7 @@ function EditProfile() {
             degree:"",
             fieldOfStudy:""
     })
-    let [experience,setExperience] = useState(userData.skills || [])
+    let [experience,setExperience] = useState(userData.experience || [])
     let [newExperience,setNewExperience]=useState({
             title:"",
             company:"",
@@ -100,6 +103,33 @@ function EditProfile() {
         let file=e.target.files[0]
         setBackendCoverImage(file)
         setFrontendCoverImage(URL.createObjectURL(file))
+    }
+
+    const handleSaveProfile = async () => {
+        try {
+            let formdata = new FormData()
+            formdata.append("firstName",firstName)
+            formdata.append("lastName",lastName)
+            formdata.append("userName",userName)
+            formdata.append("headline",headline)
+            formdata.append("location",location)
+            formdata.append("skills",JSON.stringify(skills))
+            formdata.append("education",JSON.stringify(education))
+            formdata.append("experience",JSON.stringify(experience))
+
+            if(backendProfileImage){
+                formdata.append("profileImage",backendProfileImage)
+            }
+            if(backendCoverImage){
+                formdata.append("coverImage",backendCoverImage)
+            }
+
+            let result = await axios.put(serverUrl+"/api/user/updateprofile",formdata,{withCredentials:true})
+            console.log(result);
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
   return (
@@ -193,7 +223,7 @@ function EditProfile() {
                 </div>
             </div>
 
-            <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white '>Save Profile</button>
+            <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white ' onClick={()=>handleSaveProfile()}>Save Profile</button>
 
         </div>
     </div>
