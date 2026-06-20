@@ -38,7 +38,7 @@ function EditProfile() {
     let [backendProfileImage,setBackendProfileImage] = useState(null)
     let [frontendCoverImage,setFrontendCoverImage] = useState(userData.coverImage || null)
     let [backendCoverImage,setBackendCoverImage] = useState(null)
-    
+    let [saving,setSaving]=useState(false)
 
     const profileImage=useRef();
     const coverImage=useRef();
@@ -106,6 +106,7 @@ function EditProfile() {
     }
 
     const handleSaveProfile = async () => {
+        setSaving(true)
         try {
             let formdata = new FormData()
             formdata.append("firstName",firstName)
@@ -125,7 +126,9 @@ function EditProfile() {
             }
 
             let result = await axios.put(serverUrl+"/api/user/updateprofile",formdata,{withCredentials:true})
-            console.log(result);
+            setUserData(result.data)
+            setSaving(false)
+            setEdit(false)
 
         } catch (error) {
             console.log(error)
@@ -223,7 +226,7 @@ function EditProfile() {
                 </div>
             </div>
 
-            <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white ' onClick={()=>handleSaveProfile()}>Save Profile</button>
+            <button className='w-[100%] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white' disabled={saving} onClick={()=>handleSaveProfile()}>{saving?"saving":"Save Profile"}</button>
 
         </div>
     </div>

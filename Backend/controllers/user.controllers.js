@@ -16,7 +16,6 @@ export const getCurrentUser = async (req,res) => {
     }
 }
 
-
 export const updateProfile= async (req,res) => {
     try {
         let {firstName,lastName,userName,headline,location,gender}= req.body
@@ -37,7 +36,7 @@ export const updateProfile= async (req,res) => {
 
         let user = await User.findByIdAndUpdate(req.userId,{
           firstName,lastName,userName,headline,location,gender,skills,education,experience,profileImage,coverImage
-        }).select("-password")
+        },{new:true}).select("-password")
         return res.status(200).json(user)
 
     } catch (error) {

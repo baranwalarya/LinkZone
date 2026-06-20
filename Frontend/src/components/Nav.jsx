@@ -54,7 +54,7 @@ function Nav() {
             {showPopUp && <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] right-0 rounded-lg flex flex-col items-center p-[20px] gap-[20px] z-50'>
 
                 <div className='w-[70px] h-[70px] rounded-full overflow-hidden'>
-                    <img src={dp} alt="" className='w-full h-full'/>
+                    <img src={userData.profileImage || dp} alt="" className='w-full h-full'/>
                 </div>
 
                 <div className='text-[19px] font-semibold text-gray-700'>
@@ -88,7 +88,7 @@ function Nav() {
                 <div className='hidden md:block'>Notification</div>
             </div>
             <div className='w-[50px] h-[50px] rounded-full overflow-hidden cursor-pointer' onClick={()=>setShowPopUp(prev=>!prev)}>
-                <img src={dp} alt="" className='w-full h-full'/>
+                <img src={userData.profileImage || dp} alt="" className='w-full h-full'/>
             </div>
         </div>
     </div>
