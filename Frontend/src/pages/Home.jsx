@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Nav from '../components/Nav.jsx'
 import EditProfile from '../components/EditProfile.jsx'
 import dp from "../assets/dp.png"
@@ -7,14 +7,47 @@ import { IoCameraOutline } from "react-icons/io5";
 import { useContext } from 'react';
 import { userDataContext } from '../context/UserContext.jsx';
 import { MdEdit } from "react-icons/md";
+import { RxCross1 } from "react-icons/rx";
+import { FaImage } from "react-icons/fa6";
+import axios from 'axios';
+import { authDataContext } from '../context/AuthContext.jsx';
 
 function Home() {
 
   let {userData,setUserData,edit,setEdit}=useContext(userDataContext)
+  let {serverUrl} = useContext(authDataContext)
   
+  let [frontendImage,setFrontendImage] = useState("")
+  let [backendImage,setBackendImage] = useState("")
+  let [description,setDescription] = useState("")
+  let [uploadPost,setUploadPost]=useState(false)
+
+  let image=useRef()
+
+  function handleImage(e){
+    let file=e.target.files[0]
+    setBackendImage(file)
+    setFrontendImage(URL.createObjectURL(file))
+  }
+
+  async function handleUploadPost(){
+    try {
+      let formdata=new FormData()
+      formdata.append("description",description)
+
+      if(backendImage){
+        formdata.append("image",backendImage)
+      }
+
+      let result= await axios.post(serverUrl+"/api/post/create",formdata,{withCredentials:true})
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
-    <div className='w-full min-h-[100vh] bg-[#f3f2ec] pt-[100px] flex items-start justify-center gap-[20px] px-[10px]  flex-col lg:flex-row  '>
+    <div className='w-full min-h-[100vh] bg-[#f3f2ec] pt-[100px] flex items-start justify-center gap-[20px] px-[10px] flex-col lg:flex-row  relative'>
 
 
       {edit && <EditProfile />}
@@ -46,11 +79,53 @@ function Home() {
               <button className='w-[100%] h-[40px] mt-[30px] my-[25px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] flex items-center justify-center gap-[10px]' onClick={()=>setEdit(true)}>Edit Profile <MdEdit className='text-[20px]'/></button>
 
             </div>
-
         </div>
 
-        <div className='w-full lg:w-[50%] min-h-[200px] bg-[white] shadow-lg'>
+        {uploadPost && <div className='w-full h-full bg-black absolute top-0 z-[100] left-0 opacity-[0.6]'>
+            
+        </div>}
+        
 
+        {uploadPost && <div className='w-[90%] max-w-[500px] h-[600px] bg-white shadow-lg rounded-lg absolute z-[200] p-[20px] flex items-start justify-start flex-col gap-[20px]'>
+            <div className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-gray-800 font-semibold cursor-pointer'><RxCross1 className='w-[25px] cursor-pointer h-[25px] text-gray-800 font-bold' onClick={()=>setUploadPost(false)}/></div>
+
+          <div className='flex justify-start items-center gap-[10px]'>
+            <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center  cursor-pointer' >
+              <img src={userData.profileImage || dp} alt="" className='h-full'/>
+            </div>
+
+             <div className='text-[20px]'>{`${userData.firstName} ${userData.lastName}`}</div>
+          </div>
+
+          <textarea className={`w-full ${frontendImage?"h-[200px]":"h-[550px]"} outline-none  border-none p-[10p] resize-none text-[18px]`}placeholder='What do u want to talk about..?' value={description} onChange={(e)=>setDescription(e.target.value)}></textarea>
+
+          <input type="file" ref={image} hidden onChange={handleImage}/>
+          <div className='w-full h-[300px] overflow-hidden flex justify-center items-center'>
+            <img src={frontendImage || ""} alt="" className='h-full'/>
+          </div>
+
+          <div className='w-full h-[200px] flex flex-col'>
+            <div className='p-[20px] flex items-center justify-start border-b-2 border-gray-500'><FaImage className='w-[24px] h-[24px] text-gray-600' onClick={()=>image.current.click()}/></div>
+
+            
+            <div className='flex justify-end items-center'>
+              <button className='w-[100px] h-[50px] rounded-full bg-[#1d60fd] mt-[40px] text-white' onClick={handleUploadPost}>Post</button>
+            </div>
+
+          </div>
+
+        </div>}
+        
+
+        <div className='w-full lg:w-[50%] min-h-[200px] bg-[#f0efe7]'>
+            <div className='w-full h-[120px] bg-white shadow-lg rounded-lg flex items-center p-[20px] justify-center gap-[10px]'>
+                <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer'>
+                <img src={userData.profileImage || dp} alt="" className='h-full'/>
+                </div>
+
+            <button className='w-[80%] h-[60px] border-2 rounded-full border-gray-500 flex items-center justify-start px-[20px] hover:bg-gray-200' onClick={()=>setUploadPost(true)}>Start a post</button>
+
+            </div>
         </div>
 
         <div className='w-full lg:w-[25%] min-h-[200px] bg-[white] shadow-lg'>
