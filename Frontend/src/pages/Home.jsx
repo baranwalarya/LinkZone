@@ -90,7 +90,7 @@ function Home() {
         {uploadPost && <div className='w-full h-full bg-black fixed top-0 z-[100] left-0 opacity-[0.6]'>  </div>}
         
 
-        {uploadPost && <div className='w-[90%] max-w-[500px] h-[600px] bg-white shadow-lg rounded-lg fixed z-[200] p-[20px] flex items-start justify-start flex-col gap-[20px]'>
+        {uploadPost && <div className='w-[90%] max-w-[500px] h-[600px] bg-white shadow-lg rounded-lg fixed z-[200] p-[20px] flex items-start justify-start flex-col gap-[20px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]'>
             <div className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-gray-800 font-semibold cursor-pointer'><RxCross1 className='w-[25px] cursor-pointer h-[25px] text-gray-800 font-bold' onClick={()=>setUploadPost(false)}/></div>
 
           <div className='flex justify-start items-center gap-[10px]'>
@@ -132,7 +132,7 @@ function Home() {
             <button className='w-[80%] h-[60px] border-2 rounded-full border-gray-500 flex items-center justify-start px-[20px] hover:bg-gray-200' onClick={()=>setUploadPost(true)}>Start a post</button>
             </div>
             {postData.map((post,index)=>(
-              <Post key={index} id={post._id} description={post.description} author={post.author} image={post.image} like={post.like} comment={post.comment}/>
+              <Post key={index} id={post._id} description={post.description} author={post.author} image={post.image} like={post.like} comment={post.comment} createdAt={post.createdAt}/>
             ))}
            
         </div>
