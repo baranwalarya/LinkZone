@@ -22,6 +22,17 @@ export const createPost= async (req,res) => {
         return res.status(201).json(newPost)
 
     } catch (error) {
-        return res.status(400).json(`create post error ${error}`)
+        return res.status(201).json(`create post error ${error}`)
     }
+}
+
+
+
+export const getPost=async (req,res) => {
+  try {
+    const post=await Post.find().populate("author","firstName lastName profileImage headline")
+    return res.status(200).json(post)
+  } catch (error) {
+     return res.status(500).json(`get post error ${error}`)
+  }  
 }
