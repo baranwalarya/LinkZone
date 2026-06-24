@@ -15,7 +15,8 @@ function Post({id, author, like, comment, description, image, createdAt}) {
     let {serverUrl} = useContext(authDataContext)
     let {userData,setUserData,getPost}=useContext(userDataContext)
     let [likes, setLikes] = useState(like || [])
-    let [commentContent, setCommentContent] = useState(comment || [])
+    let [commentContent, setCommentContent] = useState("")
+    let [comments, setComments] = useState(comment || [])
 
     const handleLike = async () => {
         try {
@@ -32,7 +33,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
             let result = await axios.post(serverUrl+`/api/post/comment/${id}`,{
                 content:commentContent
             }, {withCredentials: true})
-            setCommentContent(result.data.comment)
+            setComments(result.data.comment)
             console.log(result.data.comment)
         } catch (error) {
             console.log(error)
@@ -72,10 +73,10 @@ function Post({id, author, like, comment, description, image, createdAt}) {
         <div>
             <div className='w-full flex justify-between items-center p-[20px] border-b-2 border-gray-500'>
                 <div className='flex items-center justify-center gap-[5px] text-[18px]'>
-                    <AiOutlineLike className='text-[#1ebbff] w-[20px] h-[20px]'/><span>{likes.length}</span>
+                    <AiOutlineLike className='text-[#1ebbff] w-[20px] h-[20px]'/><span>{likes?.length}</span>
                 </div>
                 <div className='flex items-center justify-center gap-[5px] text-[18px]'>
-                    <span>{comment.length}</span> comments
+                    <span>{comments  .length}</span> comments
                 </div>
             </div>
             <div className='flex justify-start items-center w-full p-[20px] gap-[20px]'>
