@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js"
 import uploadOnCloudinary from "../config/cloudinary.js"
+import { io } from "../index.js";
 
 export const createPost= async (req,res) => {
     try {
@@ -48,9 +49,10 @@ export const like = async (req,res) => {
         }else{
             post.like.push(userId)
         }
-        
-       await post.save()
+         await post.save()
 
+        io.emit("likeUpdated",{postId,likes:post.like})
+        
        return res.status(200).json(post)
 
     } catch (error) {

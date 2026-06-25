@@ -17,6 +17,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
     let [likes, setLikes] = useState(like || [])
     let [commentContent, setCommentContent] = useState("")
     let [comments, setComments] = useState(comment || [])
+    let [showComment, setShowComment] = useState(false)
 
     const handleLike = async () => {
         try {
@@ -75,7 +76,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                 <div className='flex items-center justify-center gap-[5px] text-[18px]'>
                     <AiOutlineLike className='text-[#1ebbff] w-[20px] h-[20px]'/><span>{likes?.length}</span>
                 </div>
-                <div className='flex items-center justify-center gap-[5px] text-[18px]'>
+                <div className='flex items-center justify-center gap-[5px] text-[18px] cursor-pointer' onClick={()=>setShowComment(prev=>!prev)}>
                     <span>{comments?.length}</span> comments
                 </div>
             </div>
@@ -90,12 +91,14 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     <span className='text-[#07a4ff]'>Liked</span>
                 </div>}
                 
-                <div className='flex justify-center items-center gap-[5px] cursor-pointer'>
+                <div className='flex justify-center items-center gap-[5px] cursor-pointer' onClick={()=>setShowComment(prev=>!prev)}>
                     <FaRegCommentDots className='w-[24px] h-[24px]'/>
                     <span>comment</span>
                 </div>
             </div>
-            <div>
+            
+
+            {showComment && <div>
                 <form className='w-full flex justify-between items-center border-b-2 border-b-gray-300 p-[10px]' onSubmit={handleComment}>
                     <input type="text" placeholder={"Leave a comment"} className='outline-none border-none' value={commentContent} onChange={(e)=>setCommentContent(e.target.value)}/>
                     <button><IoSendSharp className='text-[#07a4ff] w-[22px] h-[22px]'/></button>
@@ -112,13 +115,14 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                                     {/* <div>{moment(com.createdAt).fromNow()}</div> */}
                                 </div>
                             </div>
-                            <div className='pl-[30px] gap-[5px]'>
+                            <div className='pl-[50px] gap-[5px]'>
                                 {com.content}
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
+            </div>}
+            
         </div>
 
     </div>
