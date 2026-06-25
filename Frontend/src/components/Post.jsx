@@ -109,7 +109,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                                 </div>
                                 <div>
                                     <div className='text-[22px] font-semibold'>{`${com.user.firstName} ${com.user.lastName}`}</div>
-                                    <div>{moment(com.createdAt).fromNow()}</div>
+                                    {/* <div>{moment(com.createdAt).fromNow()}</div> */}
                                 </div>
                             </div>
                             <div className='pl-[30px] gap-[5px]'>

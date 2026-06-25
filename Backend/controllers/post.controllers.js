@@ -27,10 +27,7 @@ export const createPost= async (req,res) => {
 
 export const getPost=async (req,res) => {
   try {
-    const post=await Post.find()
-  .populate("author","firstName lastName profileImage headline")
-  .populate({path:"comment.user", select:"firstName lastName profileImage headline"})
-  .sort({createdAt:-1})
+    const post=await Post.find().populate("author","firstName lastName profileImage headline").populate("comment.user","firstName lastName profileImage headline").sort({createdAt:-1})
     return res.status(200).json(post)
   } catch (error) {
      return res.status(500).json(`get post error ${error}`)
@@ -71,7 +68,7 @@ export const comment= async (req,res) => {
         let post=await Post.findByIdAndUpdate(postId,{
             $push:{comment:{content,user:userId}}
         },{new:true})
-        .populate({path:"comment.user", select:"firstName lastName profileImage headline"})
+        // .populate({path:"comment.user", select:"firstName lastName profileImage headline"})
         return res.status(200).json(post)
     } catch (error) {
         return res.status(500).json({message:`comment error ${error}`})
