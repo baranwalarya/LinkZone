@@ -34,6 +34,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                 content:commentContent
             }, {withCredentials: true})
             setComments(result.data.comment)
+            setCommentContent("")
         } catch (error) {
             console.log(error)
         }
@@ -41,7 +42,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
 
     useEffect(()=>{
         getPost()
-    },[likes,setLikes])
+    },[likes,setLikes,comments])
 
   return (
     <div className='w-full min-h-[500px] flex flex-col gap-[10px] bg-white rounded-lg shadow-lg p-[20px]'>
@@ -99,14 +100,20 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     <input type="text" placeholder={"Leave a comment"} className='outline-none border-none' value={commentContent} onChange={(e)=>setCommentContent(e.target.value)}/>
                     <button><IoSendSharp className='text-[#07a4ff] w-[22px] h-[22px]'/></button>
                 </form>
-                <div>
+                <div className='flex flex-col gap-[10px]'>
                     {comments.map((com)=>(
-                        <div>
+                        <div className='flex flex-col gap-[10px] border-b-2 p-[20px] border-b-gray-300'>
                             <div className='w-full flex justify-start items-center'>
                                 <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer'>
                                 <img src={com.user.profileImage || dp} alt="" className='h-full'/>
                                 </div>
-                                <div className='text-[22px] font-semibold'>{`${com.user.firstName} ${com.user.lastName}`}</div>
+                                <div>
+                                    <div className='text-[22px] font-semibold'>{`${com.user.firstName} ${com.user.lastName}`}</div>
+                                    <div>{moment(com.createdAt).fromNow()}</div>
+                                </div>
+                            </div>
+                            <div className='pl-[30px] gap-[5px]'>
+                                {com.content}
                             </div>
                         </div>
                     ))}
