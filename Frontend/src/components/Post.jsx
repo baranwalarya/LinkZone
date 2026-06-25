@@ -34,7 +34,6 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                 content:commentContent
             }, {withCredentials: true})
             setComments(result.data.comment)
-            console.log(result.data.comment)
         } catch (error) {
             console.log(error)
         }
@@ -76,7 +75,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     <AiOutlineLike className='text-[#1ebbff] w-[20px] h-[20px]'/><span>{likes?.length}</span>
                 </div>
                 <div className='flex items-center justify-center gap-[5px] text-[18px]'>
-                    <span>{comments  .length}</span> comments
+                    <span>{comments?.length}</span> comments
                 </div>
             </div>
             <div className='flex justify-start items-center w-full p-[20px] gap-[20px]'>
@@ -101,7 +100,16 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     <button><IoSendSharp className='text-[#07a4ff] w-[22px] h-[22px]'/></button>
                 </form>
                 <div>
-
+                    {comments.map((com)=>(
+                        <div>
+                            <div className='w-full flex justify-start items-center'>
+                                <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer'>
+                                <img src={com.user.profileImage || dp} alt="" className='h-full'/>
+                                </div>
+                                <div className='text-[22px] font-semibold'>{`${com.user.firstName} ${com.user.lastName}`}</div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

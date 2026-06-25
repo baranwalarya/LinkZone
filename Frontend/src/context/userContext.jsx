@@ -11,7 +11,7 @@ let [postData,setPostData] = useState([])
 const getCurrentUser = async () => {
   try {
     let result = await axios.get(`${serverUrl}/api/user/currentuser`, {withCredentials: true})
-    console.log(result)
+    // console.log(result)
     setUserData(result.data)
   } catch (error) {
     console.log(error)
@@ -23,7 +23,7 @@ const getPost=async () => {
   try {
     let result=await axios.get(serverUrl+"/api/post/getpost",{
       withCredentials:true})
-      console.log(result)
+      // console.log(result)
       setPostData(result.data)
   } catch (error) {
     console.log(error)
