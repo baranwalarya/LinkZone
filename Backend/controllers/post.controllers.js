@@ -50,7 +50,6 @@ export const like = async (req,res) => {
             post.like.push(userId)
         }
          await post.save()
-
         io.emit("likeUpdated",{postId,likes:post.like})
         
        return res.status(200).json(post)
@@ -70,7 +69,9 @@ export const comment= async (req,res) => {
         let post=await Post.findByIdAndUpdate(postId,{
             $push:{comment:{content,user:userId}}
         },{new:true})
-        // .populate({path:"comment.user", select:"firstName lastName profileImage headline"})
+        .populate("comment.user","firstName lastName profileImage headline")
+
+        io.emit("commentAdded",{postId,comm:post.comment})
         return res.status(200).json(post)
     } catch (error) {
         return res.status(500).json({message:`comment error ${error}`})

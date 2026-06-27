@@ -18,7 +18,7 @@ let server=http.createServer(app)
 export const io=new Server(server,{
     cors:({
     origin: "http://localhost:5173",
-    credentials: true
+    credentials : true
     })
 })
 const port = process.env.PORT || 5000;
@@ -35,12 +35,15 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/connection", connectionRouter);
+export const userSocketMap=new Map()
 
 io.on("connection",(socket)=>{
-  console.log("user connected",socket.id)
 
+  socket.on("register",(userId)=>{
+    userSocketMap.set(userId,socket.id)
+  })
   socket.on("disconnect",(socket)=>{
-    console.log("user disconnected",socket.id)
+    
   })
 })
 

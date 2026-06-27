@@ -8,7 +8,10 @@ import { authDataContext } from '../context/AuthContext';
 import { userDataContext } from '../context/UserContext';
 import { BiSolidLike } from "react-icons/bi";
 import { IoSendSharp } from "react-icons/io5";
+import {io} from "socket.io-client"
+import ConnectionButton from './ConnectionButton.jsx';
 
+let socket=io("http://localhost:8000")
 function Post({id, author, like, comment, description, image, createdAt}) {
 
     let [more, setMore] = useState(false)
@@ -42,6 +45,25 @@ function Post({id, author, like, comment, description, image, createdAt}) {
     }
 
     useEffect(()=>{
+        socket.on("likeUpdated",({postId,likes})=>{
+            if(postId==id){
+                setLikes(likes)
+            }
+        })
+
+        socket.on("commentAdded",({postId,comm})=>{
+            if(postId==id){
+                setComments(comm)
+            }
+        })
+
+        return ()=>{
+            socket.off("likeUpdated")
+            socket.off("commentAdded")
+        }
+    },[id])
+
+    useEffect(()=>{
         getPost()
     },[likes,setLikes,comments])
 
@@ -58,6 +80,11 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     <div className='text-[16px]'>{author.headline}</div>
                     <div className='text-[16px]'>{moment(createdAt).fromNow()}</div>
                 </div>
+            </div>
+            <div>
+
+                {userData._id!=author._id && <ConnectionButton userId={author._id}/>}
+
             </div>
         </div>
 
