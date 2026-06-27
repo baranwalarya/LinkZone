@@ -54,9 +54,8 @@ function Home() {
 
   return (
     <div className='w-full min-h-[100vh] bg-[#f3f2ec] pt-[100px] flex items-center lg:items-start justify-center gap-[20px] px-[10px] flex-col lg:flex-row relative pb-[50px]'>
-
-
       {edit && <EditProfile />}
+
       <Nav/>
 
         {/* Card div */}
@@ -81,10 +80,9 @@ function Home() {
               <div className='text-[22px]'>{`${userData.firstName} ${userData.lastName}`}</div>
               <div className='text-[19px] font-semibold text-gray-600'>{userData.headline || ""}</div>
               <div className='text-[16px] text-gray-500'>{userData.location}</div>
+            </div>
 
               <button className='w-[100%] h-[40px] mt-[30px] my-[25px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] flex items-center justify-center gap-[10px]' onClick={()=>setEdit(true)}>Edit Profile <MdEdit className='text-[20px]'/></button>
-
-            </div>
         </div>
 
         {uploadPost && <div className='w-full h-full bg-black fixed top-0 z-[100] left-0 opacity-[0.6]'>  </div>}

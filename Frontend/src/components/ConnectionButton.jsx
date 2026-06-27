@@ -25,8 +25,9 @@ let navigate=useNavigate()
 
     const handleRemoveConnection=async () => {
         try {
-            let result=await axios.delete(`${serverUrl}/api/connection/remove/${userId}`,{},{withCredentials:true})
+            let result=await axios.delete(`${serverUrl}/api/connection/remove/${userId}`,{withCredentials:true})
             console.log(result)
+            setStatus("Connect")
         } catch (error) {
             console.log(error)
         }
@@ -60,6 +61,7 @@ let navigate=useNavigate()
     const handleClick=async () => {
         if(status=="disconnect"){
             await handleRemoveConnection()
+             await handleGetStatus()
         }else if(status=="received"){
             navigate("/network")
         }else{

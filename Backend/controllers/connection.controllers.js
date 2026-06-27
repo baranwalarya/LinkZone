@@ -32,7 +32,7 @@ export const sendConnection = async (req,res) => {
         })
 
         let receiverSocketId=userSocketMap.get(id)
-        let sendersocketId=userSocketMap.get(sender)
+        let senderSocketId=userSocketMap.get(sender)
 
         if(receiverSocketId){
             io.to(receiverSocketId).emit("statusUpdate",{updatedUserId:sender,newStatus:"received"})
@@ -76,7 +76,7 @@ export const acceptConnection = async (req,res) => {
         let sendersocketId=userSocketMap.get(connection.sender._id.toString())
 
         if(receiverSocketId){
-            io.to(receiverSocketId).emit("statusUpdate",{updatedUserId:sender,newStatus:"disconnect"})
+            io.to(receiverSocketId).emit("statusUpdate",{updatedUserId:connection.sender._id,newStatus:"disconnect"})
         }
         
         if(senderSocketId){
@@ -193,7 +193,7 @@ export const getUserConnections = async (req,res) => {
             "firstName lastName userName profileImage headline connection"
         );
 
-        return res.status.json(user.connection);
+        return res.status(200).json(user.connection);
     } catch (error) {
         console.error("Error in getUserConnections controller:",error);
         res.status(500).json({message:"Server error"})
