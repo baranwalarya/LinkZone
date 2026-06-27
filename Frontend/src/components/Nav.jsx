@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Nav() {
     let [activeSearch,setActiveSearch] = useState(false)
-    let {userData,setUserData}=useContext(userDataContext)
+    let {userData,setUserData,handleGetProfile}=useContext(userDataContext)
     let [showPopUp,setShowPopUp] = useState(false)
     let navigate=useNavigate()
     let {serverUrl} = useContext(authDataContext)

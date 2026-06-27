@@ -35,7 +35,7 @@ let navigate=useNavigate()
 
     const handleGetStatus=async () => {
         try {
-            let result=await axios.get(`${serverUrl}/api/connection/getStatus/${userId}`,{withCredentials:true})
+            let result=await axios.get(`${serverUrl}/api/connection/getstatus/${userId}`,{withCredentials:true})
             console.log(result)
             setStatus(result.data.status)
         } catch (error) {
