@@ -76,7 +76,12 @@ function Profile() {
                 <Post key={index} id={post._id} description={post.description} author={post.author} image={post.image} like={post.like} comment={post.comment} createdAt={post.createdAt}/>
             ))}
 
-            {userData.skills.length>0 && <div className='w-full h-[100px] flex items-center p-[20px] text-[22px] text-gray-600 font-semibold bg-white shadow-lg rounded-lg'>Skills</div>}
+            {userData.skills.length>0 && <div className='w-full h-[100px] flex items-center p-[20px]  font-semibold bg-white shadow-lg rounded-lg'>
+                <div className='text-[22px] text-gray-600'>Skills</div>
+                {userData.skills.map((skill)=>(
+                    <div>{skill}</div>
+                ))}
+            </div>}
 
         </div>
     </div>
