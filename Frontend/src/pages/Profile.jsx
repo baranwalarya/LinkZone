@@ -21,7 +21,7 @@ function Profile() {
 
     useEffect(()=>{
         setProfilePost(postData.filter((post)=>post.author._id==profileData._id))
-    },[])
+    },[profileData])
     
   return (
     <div className='w-full min-h-[100vh] bg-[#f3f2ec] flex flex-col items-center pt-[100px] pb-[40px]'>

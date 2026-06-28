@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Nav from '../components/Nav.jsx'
 import EditProfile from '../components/EditProfile.jsx'
 import Post from '../components/Post.jsx'
@@ -22,9 +22,9 @@ function Home() {
   let [backendImage,setBackendImage] = useState("")
   let [description,setDescription] = useState("")
   let [uploadPost,setUploadPost]=useState(false)
-
   let image=useRef()
   let [posting,setPosting] = useState(false)
+  let [suggestedUser,setSuggestedUser] = useState([])
 
   function handleImage(e){
     let file=e.target.files[0]
@@ -51,6 +51,20 @@ function Home() {
       console.log(error)
     }
   }
+
+  const handleSuggestedUser = async () => {
+    try {
+      let result=await axios.get(serverUrl+"/api/user/suggestedusers",{withCredentials:true})
+      console.log(result.data)
+      setSuggestedUser(result.data)
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(()=>{
+    handleSuggestedUser()
+  },[])
 
   return (
     <div className='w-full min-h-[100vh] bg-[#f3f2ec] pt-[100px] flex items-center lg:items-start justify-center gap-[20px] px-[10px] flex-col lg:flex-row relative pb-[50px]'>
@@ -135,8 +149,31 @@ function Home() {
            
         </div>
 
-        <div className='w-full lg:w-[25%] min-h-[200px] bg-[white] shadow-lg'>
+        <div className='w-full lg:w-[25%] min-h-[200px] bg-[white] shadow-lg hidden lg:flex flex-col p-[20px]'>
+          <h1 className='text-[20px] text-gray-600 font-semibold'>Suggested Users</h1>
+            {suggestedUser.length>0 && <div className='flex flex-col gap-[10px]'>
+              {suggestedUser.map((su)=>(
+                <div className='flex items-center gap-[10px] mt-[10px]'>
+                  <div className='w-[40px] h-[40px] rounded-full overflow-hidden'>
+                    <img src={su.profileImage || dp} alt="" className='w-full h-full'/>
+                  </div>
 
+                  <div>                      
+                    <div className='text-[19px] font-semibold text-gray-700'>
+                      {`${su.firstName} ${su.lastName}`}
+                    </div>
+                  
+                    <div className='text-[15px] font-semibold text-gray-700'>
+                      {su.headline}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>}
+
+            {suggestedUser.length==0 && <div>
+              No suggested user
+            </div>}
         </div>
 
     </div>

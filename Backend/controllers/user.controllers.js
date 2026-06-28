@@ -58,3 +58,43 @@ export const getprofile = async (req,res) => {
         return res.status(500).json({message:"get profile error"})
     }
 }
+
+
+export const search=async (req,res) => {
+    try {
+        let {query}=req.query
+        if(!query){
+            return res.status(400).json({message:"query is required"})
+        }
+        let users= await User.find({
+            $or:[
+                {firstName:{$regex:query,$options:"i"}},
+                {lastName:{$regex:query,$options:"i"}},
+                {userName:{$regex:query,$options:"i"}},
+                {skills:{$in:query}}
+            ]
+        })
+        return res.status(200).json(users)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:"search error"})
+    }
+}
+
+export const getSuggestedUser=async (req,res) => {
+    try {
+        let currentUser = await User.findById(req.userId).select("connection")
+        let suggestedUsers=await User.find({
+            _id:{
+                $ne:currentUser,$nin:currentUser.connection
+            }
+           
+        }).select("-password")
+
+        return res.status(200).json(suggestedUsers)
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:"suggested user error"})
+    }
+}
