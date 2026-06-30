@@ -1,6 +1,7 @@
 import Connection from "../models/connection.model.js";
 import User from "../models/user.model.js";
 import {io,userSocketMap} from "../index.js";
+import Notification from "../models/notification.model.js";
 
 export const sendConnection = async (req,res) => {
     try {
@@ -64,19 +65,25 @@ export const acceptConnection = async (req,res) => {
 
         connection.status="accepted"
         await connection.save()
+        await Notification.create({
+    receiver: connection.sender,
+    type: "connectionAccepted",
+    relatedUser: req.userId
+})
+
         await User.findByIdAndUpdate(req.userId,{
-            $addToSet:{connection:connection.sender._id}
+            $addToSet:{connection:connection.sender}
         })
 
-        await User.findByIdAndUpdate(connection.sender._id,{
+        await User.findByIdAndUpdate(connection.sender,{
             $addToSet:{connection:req.userId}
         })
 
-        let receiverSocketId=userSocketMap.get(connection.receiver._id.toString())
-        let sendersocketId=userSocketMap.get(connection.sender._id.toString())
+        let receiverSocketId=userSocketMap.get(req.userId.toString())
+        let senderSocketId=userSocketMap.get(connection.sender.toString())
 
         if(receiverSocketId){
-            io.to(receiverSocketId).emit("statusUpdate",{updatedUserId:connection.sender._id,newStatus:"disconnect"})
+            io.to(receiverSocketId).emit("statusUpdate",{updatedUserId:connection.sender,newStatus:"disconnect"})
         }
         
         if(senderSocketId){
@@ -86,7 +93,8 @@ export const acceptConnection = async (req,res) => {
         return res.status(200).json({message:"connection accepted"})
 
     } catch (error) {
-        return res.status(200).json({message:`connection accepted error ${error}`})
+        console.log(error)
+        return res.status(500).json({message:`connection accepted error ${error}`})
     }
 }
 
@@ -154,7 +162,7 @@ export const removeConnection = async (req,res) => {
         await User.findByIdAndUpdate(myId, {$pull:{connection:myId}});
 
         let receiverSocketId=userSocketMap.get(otherUserId)
-        let sendersocketId=userSocketMap.get(myId)
+        let senderSocketId=userSocketMap.get(myId)
 
         if(receiverSocketId){
             io.to(receiverSocketId).emit("statusUpdate",{updatedUserId:myId,newStatus:"connect"})

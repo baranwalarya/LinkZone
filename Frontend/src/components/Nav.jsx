@@ -125,7 +125,7 @@ function Nav() {
                 <FaUsers className='h-[20px] w-[20px] text-gray-600'/>
                 <div>My Network</div>
             </div>
-            <div className='flex flex-col items-center justify-center text-gray-600 '>
+            <div className='flex flex-col items-center justify-center text-gray-600 cursor-pointer'  onClick={()=>navigate("/notification")}>
                 <IoNotificationsSharp className='h-[20px] w-[20px] text-gray-600'/>
                 <div className='hidden md:block'>Notification</div>
             </div>

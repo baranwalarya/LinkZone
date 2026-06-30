@@ -5,21 +5,20 @@ import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa";
 import axios from 'axios';
 import { authDataContext } from '../context/AuthContext';
-import { userDataContext } from '../context/UserContext';
+import { socket, userDataContext } from '../context/UserContext';
 import { BiSolidLike } from "react-icons/bi";
 import { IoSendSharp } from "react-icons/io5";
-import {io} from "socket.io-client"
+
 import ConnectionButton from './ConnectionButton.jsx';
 
-let socket=io("http://localhost:8000")
 function Post({id, author, like, comment, description, image, createdAt}) {
 
     let [more, setMore] = useState(false)
     let {serverUrl} = useContext(authDataContext)
     let {userData,setUserData,getPost,handleGetProfile}=useContext(userDataContext)
-    let [likes, setLikes] = useState(like || [])
+    let [likes, setLikes] = useState([])
     let [commentContent, setCommentContent] = useState("")
-    let [comments, setComments] = useState(comment || [])
+    let [comments, setComments] = useState([] )
     let [showComment, setShowComment] = useState(false)
 
     const handleLike = async () => {
@@ -63,9 +62,10 @@ function Post({id, author, like, comment, description, image, createdAt}) {
         }
     },[id])
 
-    useEffect(()=>{
-        getPost()
-    },[likes,setLikes,comments])
+   useEffect(()=>{
+    setLikes(like)
+    setComments(comment)
+   },[likes,comments])
 
   return (
     <div className='w-full min-h-[500px] flex flex-col gap-[10px] bg-white rounded-lg shadow-lg p-[20px]'>
