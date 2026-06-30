@@ -6,6 +6,10 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import { RxCrossCircled } from "react-icons/rx";
 import dp from "../assets/dp.png"
 
+import io from "socket.io-client"
+
+const socket=io("https://linkzone-backend-7ivk.onrender.com")
+
 function Network() {
   let {serverUrl}=useContext(authDataContext)
   let [connections,setConnections]=useState([])

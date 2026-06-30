@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import { userDataContext } from '../context/UserContext'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-const socket=io("http://localhost:8000")
+const socket=io("https://linkzone-backend-7ivk.onrender.com")
 function ConnectionButton({userId}) {
 let {serverUrl} = useContext(authDataContext)
 let {userData,setUserData} = useContext(userDataContext)
