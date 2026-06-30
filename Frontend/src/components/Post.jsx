@@ -65,7 +65,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
    useEffect(()=>{
     setLikes(like)
     setComments(comment)
-   },[likes,comments])
+   },[like,comment])
 
   return (
     <div className='w-full min-h-[500px] flex flex-col gap-[10px] bg-white rounded-lg shadow-lg p-[20px]'>
